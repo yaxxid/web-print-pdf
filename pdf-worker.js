@@ -12,8 +12,8 @@ const IS_PROD = process.env.NODE_ENV === 'production' || process.env.RENDER;
 
 // CHANGE 2: Define a fallback path for the Chromium executable
 const EXECUTABLE_PATH = IS_PROD
-    // Common path on Linux environments configured with a buildpack
-    ? '/usr/bin/chromium-browser' 
+    // CRITICAL FIX: Standard path when Chromium is installed via apt-get in Dockerfile
+    ? '/usr/bin/chromium' 
     // Fallback for local testing (uses the default path found by puppeteer-core)
     : puppeteer.executablePath(); 
 
@@ -24,6 +24,13 @@ const EXECUTABLE_PATH = IS_PROD
 app.post('/generate-pdf', async (req, res) => {
     const { url } = req.body;
 
+    // Optional: Add the GET route implementation here if you want it
+    /*
+    if (req.method === 'GET') {
+        // Handle GET query parameter here if desired
+    }
+    */
+    
     if (!url) {
         return res.status(400).send({ error: 'URL parameter is required in the request body.' });
     }
