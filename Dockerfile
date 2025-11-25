@@ -1,11 +1,13 @@
-# Start from a standard Node.js image (using version 22 as per your build logs)
+# Use a Node.js base image
 FROM node:22
 
 # Set the working directory inside the container
 WORKDIR /usr/src/app
 
-# Install system dependencies required for Chromium (essential fix for the ENOENT error)
-# Note: These are standard packages for running headless Chrome/Chromium on Debian/Ubuntu
+# Install system dependencies required for Chromium
+# This list is exhaustive and necessary to fix the 'ENOENT' error by installing 
+# both Chromium itself and all its runtime dependencies.
+# The 'chromium' package is what provides the /usr/bin/chromium executable.
 RUN apt-get update && \
     apt-get install -y \
     chromium \
@@ -20,7 +22,6 @@ RUN apt-get update && \
     libgtk-3-0 \
     libicu-dev \
     libjpeg-dev \
-    libmysqlclient-dev \
     libpango-1.0-0 \
     libpangocairo-1.0-0 \
     libssl-dev \
